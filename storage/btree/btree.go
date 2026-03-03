@@ -4,7 +4,7 @@ type BTree struct {
 	//pointer to the tree's node
 	root []uint64
 
-	get func(uint16) BNode
-	new func(BNode) uint64
-	del func(uint64)
+	get func(uint16) BNode //get a page from the disk
+	new func(BNode) uint64 //allocate a page to the object
+	del func(uint64)       //free the corresponding page
 }
