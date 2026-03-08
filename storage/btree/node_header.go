@@ -3,7 +3,8 @@ package btree
 import "encoding/binary"
 
 const (
-	HEADER = uint16(4)
+	HEADER          = uint16(4)
+	BTREE_PAGE_SIZE = uint16(4096)
 )
 
 func (node BNode) btype() uint16 {
