@@ -1,8 +1,19 @@
-const DB_SIG = "MangekyoSharingan"
+package memory
+
+import (
+	"bytes"
+	"encoding/binary"
+	"errors"
+	"fmt"
+)
+
+const (
+	DB_SIG = "MangekyoSharingan"
+)
 
 func masterLoad(db *KV) error {
 	if db.mmap.file == 0 { //create a new master page on the first write
-		dp.page.flushed = 1 //reserved for master page
+		db.page.flushed = 1 //reserved for master page
 		return nil
 	}
 
@@ -11,7 +22,7 @@ func masterLoad(db *KV) error {
 	used := binary.LittleEndian.Uint64(data[24:])
 
 	if !bytes.Equal([]bytes(DB_SIG), data[:16]) {
-		return erorrs.New("bag signature")
+		return errors.New("bag signature")
 	}
 
 	bad := !(1 <= used && used <= uint64(db.mmap.file/BTREE_PAGE_SIZE)) || !(0 <= root && root < used)
@@ -25,7 +36,7 @@ func masterLoad(db *KV) error {
 }
 
 // update the master page
-func masterStore(db *kv) error {
+func masterStore(db *KV) error {
 	var data [32]byte
 	copy(data[0:], []byte(DB_SIG))
 	binary.LittleEndian.PutUint64(data[16:], db.tree.root)
@@ -38,5 +49,3 @@ func masterStore(db *kv) error {
 	}
 	return nil
 }
-
-
